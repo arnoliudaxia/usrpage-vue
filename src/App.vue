@@ -1,12 +1,14 @@
 <script>
 import navigator from './components/theHeader.vue'
 import uploadPage from './components/uploadPage.vue'
-
 import userpage from "@/components/userPage.vue";
+import historyPage from "@/components/historyPage.vue";
 
 const routes = {
   '/': userpage,
   '/upload': uploadPage,
+  '/history': historyPage,
+
 }
 
 export default {

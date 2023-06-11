@@ -35,7 +35,7 @@ export default {
         Upload
       </v-btn>
 
-      <v-btn v-if="isAuthenticated" @click="showStatus">
+      <v-btn v-if="isAuthenticated" @click="showStatus" href="#/history">
         <v-icon icon="mdi-history"></v-icon>
         History
       </v-btn>

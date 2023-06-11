@@ -47,19 +47,19 @@ export default {
 
   <v-main>
     <v-container fluid fill-height>
-      <v-row align="center" justify="center">
-        <v-avatar color="surface-variant" size="72">
-          <v-img
-              :src="showWhatActvator"
-              width="100%"
-              aspect-ratio="1"
-              contain
-          ></v-img>
-        </v-avatar>
-      </v-row>
-      <v-row justify="center">
-        <v-label :text="showWhatUserName"></v-label>
-      </v-row>
+        <v-row align="center" justify="center">
+          <v-avatar color="surface-variant" size="72">
+            <v-img
+                :src="showWhatActvator"
+                width="100%"
+                aspect-ratio="1"
+                contain
+            ></v-img>
+          </v-avatar>
+        </v-row>
+        <v-row justify="center">
+          <v-label :text="showWhatUserName"></v-label>
+        </v-row>
       <v-row justify="center" style="margin: 25px">
         <v-btn @click="login" v-if="!isAuthenticated">Log in</v-btn>
         <v-btn @click="logout" v-else>Log out</v-btn>

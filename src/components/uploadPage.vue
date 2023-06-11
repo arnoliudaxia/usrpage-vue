@@ -40,7 +40,7 @@ export default {
 <template>
     <v-container fluid fill-height>
       <v-row align="center" justify="center">
-        <v-col cols="12" sm="6">
+        <v-col cols="12" sm="6" md="4" lg="3">
           <label for="upload" class="upload-label">
             <v-img
                 :src="uploadedImage"
@@ -59,7 +59,7 @@ export default {
         </v-col>
       </v-row>
       <v-row align="center" justify="center">
-        <v-btn @click="submitUploadImg">上传</v-btn>
+        <v-btn @click="submitUploadImg">上传图片</v-btn>
       </v-row>
     </v-container>
 
