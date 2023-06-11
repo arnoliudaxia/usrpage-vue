@@ -1,9 +1,9 @@
 <script>
+import uploadImgplaceholder from "./img/uploadImgPlaceholder-removebg-preview.png";
 export default {
   data() {
     return {
-      uploadedImage: null,
-
+      uploadedImage: uploadImgplaceholder,
     }
   },
   methods: {
@@ -40,14 +40,6 @@ export default {
         <v-col cols="12" sm="6">
           <label for="upload" class="upload-label">
             <v-img
-                v-if="!uploadedImage"
-                src="./img/uploadImgPlaceholder-removebg-preview.png"
-                width="100%"
-                aspect-ratio="1"
-                contain
-            ></v-img>
-            <v-img
-                v-else
                 :src="uploadedImage"
                 width="100%"
                 aspect-ratio="1"
