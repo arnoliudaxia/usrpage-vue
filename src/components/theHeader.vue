@@ -3,6 +3,8 @@ export default {
   data() {
     return {
       nowPage: 0,
+      isAuthenticated: this.$auth0.isAuthenticated,
+
     }
   },
   methods: {
@@ -14,19 +16,26 @@ export default {
 </script>
 
 <template>
-    <v-layout class="overflow-visible" style="height: 56px;" >
+  <v-layout class="overflow-visible" style="height: 56px;">
     <v-bottom-navigation
-      v-model="nowPage"
-      active
-      color="primary"
-      grow
+        v-model="nowPage"
+        active
+        color="primary"
+        grow
     >
-      <v-btn @click="showStatus" >
+
+        <v-btn @click="showStatus"  href="#/">
+          <v-icon icon="mdi-account"></v-icon>
+          User
+        </v-btn>
+
+
+      <v-btn v-if="isAuthenticated" @click="showStatus" href="#/upload">
         <v-icon icon="mdi-upload"></v-icon>
         Upload
       </v-btn>
 
-      <v-btn @click="showStatus" >
+      <v-btn v-if="isAuthenticated" @click="showStatus">
         <v-icon icon="mdi-history"></v-icon>
         History
       </v-btn>

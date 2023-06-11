@@ -1,6 +1,11 @@
 <script>
 import uploadImgplaceholder from "./img/uploadImgPlaceholder-removebg-preview.png";
+import navigator from './theHeader.vue'
+
 export default {
+  components: {
+    navigator,
+  },
   data() {
     return {
       uploadedImage: uploadImgplaceholder,
@@ -22,8 +27,7 @@ export default {
     },
     submitUploadImg() {
       console.log("用户点击上传按钮");
-      if (this.uploadedImage)
-      {
+      if (this.uploadedImage) {
         // TODO 上传图片回调
 
       }
@@ -33,9 +37,8 @@ export default {
 </script>
 
 
-
 <template>
-      <v-container fluid fill-height>
+    <v-container fluid fill-height>
       <v-row align="center" justify="center">
         <v-col cols="12" sm="6">
           <label for="upload" class="upload-label">
@@ -59,5 +62,6 @@ export default {
         <v-btn @click="submitUploadImg">上传</v-btn>
       </v-row>
     </v-container>
+
 
 </template>

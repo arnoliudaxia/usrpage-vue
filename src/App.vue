@@ -2,30 +2,56 @@
 import navigator from './components/theHeader.vue'
 import uploadPage from './components/uploadPage.vue'
 
+import userpage from "@/components/userPage.vue";
+
+const routes = {
+  '/': userpage,
+  '/upload': uploadPage,
+}
+
 export default {
   components: {
     navigator,
-    uploadPage
-
+    uploadPage,
+    userpage,
   },
   data() {
-    return {}
+    return {
+      isAuthenticated: this.$auth0.isAuthenticated,
+      currentPath: window.location.hash
+    }
   },
   methods: {
     showPageIndex() {
       // 输出现在的页面索引
       console.log(this.$refs.nav.nowPage);
     },
+
   },
-  computed: {}
+  computed: {
+    currentView() {
+      return routes[this.currentPath.slice(1) || '/'] || NotFound
+    }
+  },
+  mounted() {
+    window.addEventListener('hashchange', () => {
+      this.currentPath = window.location.hash
+    })
+  }
 }
 </script>
 
 <template>
+  <!--    <Auth></Auth>-->
+  <!--    <pofile></pofile>-->
+  <!--    <v-btn @click="showimg">img</v-btn>-->
+  <!--  <uploadPage></uploadPage>-->
   <v-app>
-    <uploadPage></uploadPage>
-    <!--    <v-btn @click="showimg">img</v-btn>-->
-    <navigator ref="nav"/>
+    <component :is="currentView"/>
+    <!--    <userpage v-if="getPageIndex()==0"></userpage>-->
+    <navigator
+        ref="nav"/>
   </v-app>
+
 
 </template>
