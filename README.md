@@ -27,3 +27,10 @@ npm run dev
 ```sh
 npm run build
 ```
+---
+上面都是自动生成的（；´д｀）ゞ
+
+# 结构
+主页在App.vue里，每个子页面都是单独的组件，位于src/components下
+
+第一页：用户上传页面，src/components/uploadPage.vue

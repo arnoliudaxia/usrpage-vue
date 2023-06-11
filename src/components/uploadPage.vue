@@ -41,7 +41,7 @@ export default {
           <label for="upload" class="upload-label">
             <v-img
                 v-if="!uploadedImage"
-                src="img/uploadImgPlaceholder-removebg-preview.png"
+                src="./img/uploadImgPlaceholder-removebg-preview.png"
                 width="100%"
                 aspect-ratio="1"
                 contain
