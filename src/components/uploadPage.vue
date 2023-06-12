@@ -2,15 +2,15 @@
 import uploadImgplaceholder from "./img/uploadImgPlaceholder-removebg-preview.png";
 
 export default {
-  components: {},
+  props: ['backURL',"balanceURL"],
   data() {
     return {
       uploadedImage: uploadImgplaceholder,
       dialogVisible: false, // 控制弹窗的显示与隐藏
       user: this.$auth0.user,
-      userBlessing:"",
-      isShow:false,
-      taskID:undefined,
+      userBlessing: "",
+      isShow: false,
+      taskID: undefined,
     }
   },
   methods: {
@@ -27,42 +27,66 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-    async backendApi1() {
 
+    async loadBlanceAPi1() {
       try {
-        const response = await fetch('http://10.19.125.242:6789/user_upload', {
+        const response = await fetch(this.balanceURL+'/Client2Intermediate/addTask', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            "user_id":this.user["sub"],
-            "input_img":this.uploadedImage,
-            "message":this.userBlessing,
-            "is_show":this.isShow,
-            "username":this.user["name"],
-            "profile_img":this.user["picture"],
+            "task_id": this.taskID,
+            "input_img": this.uploadedImage,
           })
         })
-        if (response.ok)
-        {
-          console.log("上传成功");
-          var result = (await response.text())
-          console.log(`生成的GUID为${result}`);
-          this.taskID=result;
+        if (response.ok) {
+          console.log("上传到负载均衡成功");
         }
 
       } catch (error) {
-        console.log("请求失败"+error);
+        console.log("请求失败" + error);
+      }
+    },
+
+    async backendApi1() {
+
+      try {
+        const response = await fetch(this.backURL+'/user_upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "user_id": this.user["sub"],
+            "input_img": this.uploadedImage,
+            "message": this.userBlessing,
+            "is_show": this.isShow,
+            "username": this.user["name"],
+            "profile_img": this.user["picture"],
+          })
+        })
+        if (response.ok) {
+          console.log("上传成功");
+          var result = (await response.text())
+          console.log(`生成的GUID为${result}`);
+          this.taskID = result;
+          console.log("开始上传到负载均衡");
+          this.loadBlanceAPi1();
+        }
+
+      } catch (error) {
+        console.log("请求失败" + error);
       }
     },
 
     uploadImgToBackend(isShow) {
       console.log("开始上传图片到后端");
       this.dialogVisible = false;
-      this.isShow=isShow;
+      this.isShow = isShow;
       this.backendApi1();
-    },
+    }
+    ,
   },
 }
 </script>

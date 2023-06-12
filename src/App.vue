@@ -21,8 +21,6 @@ export default {
     return {
       isAuthenticated: this.$auth0.isAuthenticated,
       currentPath: window.location.hash,
-      pages:["userpage","uploadPage","navigator"],
-      pageIn:0,
     }
   },
   methods: {
@@ -43,7 +41,10 @@ export default {
 
 <template>
   <v-app>
-    <component :is="currentView"/>
+    <component :is="currentView"
+               backURL="http://10.19.125.242:6789"
+               balanceURL="http://10.19.127.222:5002"
+    />
     <navigator
         ref="nav"/>
   </v-app>

@@ -1,31 +1,62 @@
 <script>
 
 export default {
-  components: {},
+  props: ['backURL', "balanceURL"],
+
   data() {
     return {
-      "theHistories": [
-        {
-          "imgurl": "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-          "imgTime": "2023-08-01,18:20",
-          "status": 1
-        },
-        {
-          "imgurl": "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-          "imgTime": "2023-08-02,11:20",
-          "status": 0
-        },
+      theHistories: [
         // {
         //   "imgurl": "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
-        //   "imgTime": "2023-08-03,19:11",
+        //   "imgTime": "2023-08-01,18:20",
         //   "status": 1
         // },
+        // {
+        //   "imgurl": "https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg",
+        //   "imgTime": "2023-08-02,11:20",
+        //   "status": 0
+        // },
+      ],
+      user: this.$auth0.user,
 
-      ]
     }
   },
   methods: {},
   computed: {},
+  mounted() {
+    console.log("开始获取用户的历史图片");
+    fetch(this.backURL + "/user_history", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "user_id": this.user["sub"],
+      })
+    })
+        .then(response => response.json())
+        .then(data => {
+          // 处理响应数据
+          console.log(data);
+          for (let key in data) {
+            if (data.hasOwnProperty(key)) {
+              console.log(key, data[key]);
+              var theimg=data[key];
+              this.theHistories.push({
+                "imgurl":theimg["input_img"],
+                "imgTime":theimg["date_added"],
+                // TODO isfinished
+                "status": 1
+              })
+            }
+          }
+        })
+        .catch(error => {
+          // 处理错误
+          console.error(error);
+        });
+
+  }
 
 }
 </script>
