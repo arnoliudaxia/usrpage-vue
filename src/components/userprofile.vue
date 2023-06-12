@@ -2,7 +2,11 @@
   <div v-if="isLoading">Loading ...</div>
   <div v-else>
     <h2>User Profile</h2>
-    <button @click="login">Log in</button>
+<!--    <button @click="login">Log in</button>-->
+
+    <v-alert type="error" text="未登录" v-if="!isAuthenticated">
+
+    </v-alert>
 
     <pre v-if="isAuthenticated">
         <code>{{ user }}</code>

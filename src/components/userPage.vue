@@ -71,7 +71,7 @@ export default {
 
 
   <!--  是否显示用户调试信息-->
-  <!--  <pofile></pofile>-->
+    <pofile></pofile>
 
 </template>
 

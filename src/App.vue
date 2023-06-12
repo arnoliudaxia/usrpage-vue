@@ -20,20 +20,18 @@ export default {
   data() {
     return {
       isAuthenticated: this.$auth0.isAuthenticated,
-      currentPath: window.location.hash
+      currentPath: window.location.hash,
+      pages:["userpage","uploadPage","navigator"],
+      pageIn:0,
     }
   },
   methods: {
-    showPageIndex() {
-      // 输出现在的页面索引
-      console.log(this.$refs.nav.nowPage);
-    },
 
   },
   computed: {
     currentView() {
       return routes[this.currentPath.slice(1) || '/'] || NotFound
-    }
+    },
   },
   mounted() {
     window.addEventListener('hashchange', () => {
@@ -44,13 +42,8 @@ export default {
 </script>
 
 <template>
-  <!--    <Auth></Auth>-->
-  <!--    <pofile></pofile>-->
-  <!--    <v-btn @click="showimg">img</v-btn>-->
-  <!--  <uploadPage></uploadPage>-->
   <v-app>
     <component :is="currentView"/>
-    <!--    <userpage v-if="getPageIndex()==0"></userpage>-->
     <navigator
         ref="nav"/>
   </v-app>

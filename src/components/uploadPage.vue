@@ -1,14 +1,16 @@
 <script>
 import uploadImgplaceholder from "./img/uploadImgPlaceholder-removebg-preview.png";
-import navigator from './theHeader.vue'
 
 export default {
-  components: {
-    navigator,
-  },
+  components: {},
   data() {
     return {
       uploadedImage: uploadImgplaceholder,
+      dialogVisible: false, // 控制弹窗的显示与隐藏
+      user: this.$auth0.user,
+      userBlessing:"",
+      isShow:false,
+      taskID:undefined,
     }
   },
   methods: {
@@ -25,12 +27,41 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-    submitUploadImg() {
-      console.log("用户点击上传按钮");
-      if (this.uploadedImage) {
-        // TODO 上传图片回调
+    async backendApi1() {
 
+      try {
+        const response = await fetch('http://10.19.125.242:6789/user_upload', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "user_id":this.user["sub"],
+            "input_img":this.uploadedImage,
+            "message":this.userBlessing,
+            "is_show":this.isShow,
+            "username":this.user["name"],
+            "profile_img":this.user["picture"],
+          })
+        })
+        if (response.ok)
+        {
+          console.log("上传成功");
+          var result = (await response.text())
+          console.log(`生成的GUID为${result}`);
+          this.taskID=result;
+        }
+
+      } catch (error) {
+        console.log("请求失败"+error);
       }
+    },
+
+    uploadImgToBackend(isShow) {
+      console.log("开始上传图片到后端");
+      this.dialogVisible = false;
+      this.isShow=isShow;
+      this.backendApi1();
     },
   },
 }
@@ -38,30 +69,49 @@ export default {
 
 
 <template>
-    <v-container fluid fill-height>
-      <v-row align="center" justify="center">
-        <v-col cols="12" sm="6" md="4" lg="3">
-          <label for="upload" class="upload-label">
-            <v-img
-                :src="uploadedImage"
-                width="100%"
-                aspect-ratio="1"
-                contain
-            ></v-img>
-            <input
-                id="upload"
-                type="file"
-                accept="image/*"
-                style="display: none"
-                @change="handleUpload"
-            />
-          </label>
-        </v-col>
-      </v-row>
-      <v-row align="center" justify="center">
-        <v-btn @click="submitUploadImg">上传图片</v-btn>
-      </v-row>
-    </v-container>
+  <v-container fluid fill-height>
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="6" md="4" lg="3">
+        <label for="upload" class="upload-label">
+          <v-img
+              :src="uploadedImage"
+              width="100%"
+              aspect-ratio="1"
+              contain
+          ></v-img>
+          <input
+              id="upload"
+              type="file"
+              accept="image/*"
+              style="display: none"
+              @change="handleUpload"
+          />
+        </label>
+      </v-col>
+    </v-row>
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="6" md="4" lg="3">
+        <v-text-field placeholder="请输入毕业寄语..." v-model="userBlessing"></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row align="center" justify="center">
+      <v-btn @click="dialogVisible = true">提交</v-btn>
+    </v-row>
+  </v-container>
 
+  <v-dialog v-model="dialogVisible" max-width="500px">
+    <v-card>
+      <!--      <v-card-title>-->
+      <!--        <span class="headline">弹窗标题</span>-->
+      <!--      </v-card-title>-->
+      <v-card-text>
+        是否要上传大屏幕？
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" @click="uploadImgToBackend(true)">是的</v-btn>
+        <v-btn color="pink" @click="uploadImgToBackend(false)">不要不要</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 
 </template>
