@@ -1,10 +1,8 @@
 <script>
-import navigator from './theHeader.vue'
 import pofile from "@/components/userprofile.vue";
 
 export default {
   components: {
-    navigator,
     pofile,
   },
   data() {

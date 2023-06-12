@@ -37,7 +37,7 @@ export default {
           },
           body: JSON.stringify({
             "task_id": this.taskID,
-            "input_img": this.uploadedImage,
+            "input_img": this.uploadedImage.split(",")[1],
           })
         })
         if (response.ok) {
