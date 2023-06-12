@@ -44,6 +44,8 @@ export default {
     <component :is="currentView"
                backURL="http://10.19.125.242:6789"
                balanceURL="http://10.19.127.222:5002"
+               @gotoImageDetailPage="console.log(this.$refs.mainComponment.imgDetailID)"
+               ref="mainComponment"
     />
     <navigator
         ref="nav"/>
