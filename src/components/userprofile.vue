@@ -11,7 +11,6 @@
     <pre v-if="isAuthenticated">
         <code>{{ user }}</code>
         {{user["picture"]}}
-
       </pre>
   </div>
 </template>
