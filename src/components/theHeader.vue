@@ -22,12 +22,13 @@ export default {
         active
         color="primary"
         grow
+        style="position: fixed"
     >
 
-        <v-btn @click="showStatus"  href="#/">
-          <v-icon icon="mdi-account"></v-icon>
-          User
-        </v-btn>
+      <v-btn @click="showStatus" href="#/">
+        <v-icon icon="mdi-account"></v-icon>
+        User
+      </v-btn>
 
 
       <v-btn v-if="isAuthenticated" @click="showStatus" href="#/upload">

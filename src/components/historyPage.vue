@@ -222,9 +222,9 @@ export default {
         </v-card>
       </v-row>
 
-      <v-row>
-        <v-alert v-if="theHistories.length==0" type="error">什么你还没有生成图片？</v-alert>
-      </v-row>
+<!--      <v-row>-->
+<!--        <v-alert v-if="theHistories.length==0" type="error">什么你还没有生成图片？</v-alert>-->
+<!--      </v-row>-->
 
       <v-row justify="space-around">
         <v-btn text="清空历史" @click="cleanHistorydialogVisible=true"></v-btn>
