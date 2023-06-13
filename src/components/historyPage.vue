@@ -33,10 +33,10 @@ export default {
       genImgsIndex: undefined,
       bestImgIndex: undefined,
       dialogLoading: false,
-      loadingMessage:"请稍后...",
-      bestSnackbar:false,
-      bestMask:undefined,
-      bestMessage:"请在下方生成图中选择一个",
+      loadingMessage: "请稍后...",
+      bestSnackbar: false,
+      bestMask: undefined,
+      bestMessage: "请在下方生成图中选择一个",
     }
   },
   methods: {
@@ -85,7 +85,7 @@ export default {
             this.originImage = data["input_img"];
             this.genImgs = data["gen_img"];
             this.genImgsIndex = data["raw_idx"];
-            this.bestMask=Array.from({ length: this.genImgsIndex.length }, () => 1);
+            this.bestMask = Array.from({length: this.genImgsIndex.length}, () => 1);
 
             // console.log(this.genImgs);
             this.showImgDetail = true;
@@ -100,11 +100,10 @@ export default {
           });
 
     },
-    selectBestGenimgApi(indexImg)
-    {
+    selectBestGenimgApi(indexImg) {
       this.dialogLoading = true;
-      this.bestMask=Array.from({ length: this.bestMask.length }, () => 0);
-      this.bestMask[indexImg]=1;
+      this.bestMask = Array.from({length: this.bestMask.length}, () => 0);
+      this.bestMask[indexImg] = 1;
 
       fetch(this.backURL + "/select_best", {
         method: 'POST',
@@ -117,20 +116,19 @@ export default {
         })
       })
           .then(response => {
-            if (response.ok)
-            {
+            if (response.ok) {
               console.log("上传best完成");
             }
             this.dialogLoading = false;
-            this.bestSnackbar=true;
-            this.bestMessage="已选择第"+(indexImg+1)+"张图";
+            this.bestSnackbar = true;
+            this.bestMessage = "已选择第" + (indexImg + 1) + "张图";
 
           })
           .catch(error => {
             // 处理错误
             console.error(error);
             this.loadingMessage = "失败，请刷新页面";
-            this.bestSnackbar=true;
+            this.bestSnackbar = true;
           });
     }
   },
@@ -178,7 +176,8 @@ export default {
 
   <v-main>
     <v-container v-show="!showImgDetail" fluid fill-height>
-      <v-row justify="space-around" v-for="img in theHistories" style="margin: 20px;">
+      <!--      管理员历史界面-->
+      <v-row justify="space-around" v-for="img in theHistories" class="img-card">
         <v-card width="400" v-if="img.status" @click="gotoImageDetail(img.imgID)">
           <v-card-title>
             {{ img.status ? "完成" : "生成中..." }}
@@ -222,9 +221,9 @@ export default {
         </v-card>
       </v-row>
 
-<!--      <v-row>-->
-<!--        <v-alert v-if="theHistories.length==0" type="error">什么你还没有生成图片？</v-alert>-->
-<!--      </v-row>-->
+      <!--      <v-row>-->
+      <!--        <v-alert v-if="theHistories.length==0" type="error">什么你还没有生成图片？</v-alert>-->
+      <!--      </v-row>-->
 
       <v-row justify="space-around">
         <v-btn text="清空历史" @click="cleanHistorydialogVisible=true"></v-btn>
@@ -242,7 +241,7 @@ export default {
       </v-row>
 
       <!--    生成详情页面-->
-<!--      加载页面-->
+      <!--      加载页面-->
       <v-dialog
           v-model="dialogLoading"
           :scrim="false"
@@ -253,7 +252,7 @@ export default {
             color="primary"
         >
           <v-card-text>
-            {{loadingMessage}}
+            {{ loadingMessage }}
             <v-progress-linear
                 indeterminate
                 color="white"
@@ -262,29 +261,56 @@ export default {
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!--      点击某个任务之后的详情页面-->
       <v-row justify="center">
         <v-dialog v-model="showImgDetail" max-width="500px">
           <v-card>
-                  <v-card-title>
-                    <span class="headline">任务ID</span>
-                  </v-card-title>
-            <v-card-subtitle>{{imgDetailID}}</v-card-subtitle>
+            <v-card-title>
+              <span class="headline">任务ID</span>
+            </v-card-title>
+            <v-card-subtitle>{{ imgDetailID }}</v-card-subtitle>
             <v-card-text>
-              <v-card>
-                <v-card-title>原图</v-card-title>
-                <v-img :src="originImage"></v-img>
-              </v-card>
+              <v-row class="img-card">
+                <v-card>
+                  <v-card-title>原图</v-card-title>
+                  <v-img :src="originImage"></v-img>
+                </v-card>
+              </v-row>
+
               <v-alert
                   :value="true"
                   type="success"
                   elevation="2"
-                  icon="mdi-check-circle-outline">{{bestMessage}}
+                  icon="mdi-check-circle-outline">{{ bestMessage }}
               </v-alert>
               <template v-for="n in genImgs.length">
-                <v-card @click="selectBestGenimgApi(genImgsIndex[n-1])" v-if="bestMask[n-1]===1">
-                  <v-card-title>生成图{{n}}</v-card-title>
-                  <v-img :src='"data:image/png;base64,"+genImgs[n-1]'></v-img>
-                </v-card>
+                <v-row class="img-card">
+
+                  <template v-if="bestMask[n-1]===1">
+                    <v-col cols="12">
+                      <v-card @click="selectBestGenimgApi(genImgsIndex[n-1])">
+                        <v-card-title>生成图{{ n }}</v-card-title>
+                        <v-img :src='"data:image/png;base64,"+genImgs[n-1]'></v-img>
+                        <v-alert type="warning">审核状态：待审核</v-alert>
+                        <v-alert type="success" icon="mdi-check-circle-outline">审核状态：通过</v-alert>
+                        <v-alert type="error" icon="mdi-cancel">审核状态：拒绝</v-alert>
+                      </v-card>
+                    </v-col>
+                    <v-col cols="6" align="center" justify="center">
+                      <v-btn  icon color="green">
+                        <v-icon>mdi-check-circle-outline</v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="6" align="center" justify="center">
+                      <v-btn  icon color="red">
+                        <v-icon>mdi-cancel</v-icon>
+                      </v-btn>
+                    </v-col>
+
+                  </template>
+
+
+                </v-row>
               </template>
 
             </v-card-text>
@@ -295,22 +321,6 @@ export default {
       </v-row>
     </v-container>
 
-<!--&lt;!&ndash;    best选中成功反馈&ndash;&gt;-->
-<!--    <v-snackbar-->
-<!--      v-model="bestSnackbar"-->
-<!--    >-->
-<!--      成功选择图片！-->
-
-<!--      <template v-slot:actions>-->
-<!--        <v-btn-->
-<!--          color="pink"-->
-<!--          variant="text"-->
-<!--          @click="bestSnackbar = false"-->
-<!--        >-->
-<!--          Close-->
-<!--        </v-btn>-->
-<!--      </template>-->
-<!--    </v-snackbar>-->
 
   </v-main>
 
@@ -319,5 +329,7 @@ export default {
 
 
 <style scoped>
-
+.img-card {
+  margin: 20px;
+}
 </style>

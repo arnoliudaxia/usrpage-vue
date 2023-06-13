@@ -31,10 +31,10 @@ export default {
       </v-btn>
 
 
-      <v-btn v-if="isAuthenticated" @click="showStatus" href="#/upload">
-        <v-icon icon="mdi-upload"></v-icon>
-        Upload
-      </v-btn>
+<!--      <v-btn v-if="isAuthenticated" @click="showStatus" href="#/upload">-->
+<!--        <v-icon icon="mdi-upload"></v-icon>-->
+<!--        Upload-->
+<!--      </v-btn>-->
 
       <v-btn v-if="isAuthenticated" @click="showStatus" href="#/history">
         <v-icon icon="mdi-history"></v-icon>
