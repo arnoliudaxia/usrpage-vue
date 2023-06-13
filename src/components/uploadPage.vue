@@ -2,7 +2,7 @@
 import uploadImgplaceholder from "./img/uploadImgPlaceholder-removebg-preview.png";
 
 export default {
-  props: ['backURL',"balanceURL"],
+  props: ['backURL', "balanceURL"],
   data() {
     return {
       uploadedImage: uploadImgplaceholder,
@@ -11,6 +11,9 @@ export default {
       userBlessing: "",
       isShow: false,
       taskID: undefined,
+      dialogLoading: false,
+      loadingMessage: "请稍后...",
+      isUploadSuccess: false,
     }
   },
   methods: {
@@ -30,7 +33,7 @@ export default {
 
     async loadBlanceAPi1() {
       try {
-        const response = await fetch(this.balanceURL+'/Client2Intermediate/addTask', {
+        const response = await fetch(this.balanceURL + '/Client2Intermediate/addTask', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -42,17 +45,20 @@ export default {
         })
         if (response.ok) {
           console.log("上传到负载均衡成功");
+          this.dialogLoading = false;
+          this.isUploadSuccess = true;
         }
 
       } catch (error) {
         console.log("请求失败" + error);
+        this.loadingMessage = "请求失败，请刷新页面重试";
       }
     },
 
     async backendApi1() {
 
       try {
-        const response = await fetch(this.backURL+'/user_upload', {
+        const response = await fetch(this.backURL + '/user_upload', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -77,10 +83,12 @@ export default {
 
       } catch (error) {
         console.log("请求失败" + error);
+        this.loadingMessage = "请求失败，请刷新页面重试";
       }
     },
 
     uploadImgToBackend(isShow) {
+      this.dialogLoading = true;
       console.log("开始上传图片到后端");
       this.dialogVisible = false;
       this.isShow = isShow;
@@ -119,10 +127,16 @@ export default {
       </v-col>
     </v-row>
     <v-row align="center" justify="center">
-      <v-btn @click="dialogVisible = true">提交</v-btn>
+      <v-btn @click="dialogVisible = true,isUploadSuccess=false">提交</v-btn>
+    </v-row>
+    <v-row align="center" justify="center" v-show="isUploadSuccess">
+      <v-col cols="12" sm="6" md="4" lg="3">
+        <v-alert type="success">上传成功！</v-alert>
+      </v-col>
     </v-row>
   </v-container>
 
+  <!--  是否上传大屏幕的弹窗-->
   <v-dialog v-model="dialogVisible" max-width="500px">
     <v-card>
       <!--      <v-card-title>-->
@@ -135,6 +149,27 @@ export default {
         <v-btn color="primary" @click="uploadImgToBackend(true)">是的</v-btn>
         <v-btn color="pink" @click="uploadImgToBackend(false)">不要不要</v-btn>
       </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!--      加载页面-->
+  <v-dialog
+      v-model="dialogLoading"
+      :scrim="false"
+      persistent
+      width="auto"
+  >
+    <v-card
+        color="primary"
+    >
+      <v-card-text>
+        {{ loadingMessage }}
+        <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+        ></v-progress-linear>
+      </v-card-text>
     </v-card>
   </v-dialog>
 
